@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import org.fossify.clock.R
 import org.fossify.clock.databinding.ActivitySettingsBinding
 import org.fossify.clock.dialogs.ExportDataDialog
+import org.fossify.clock.dialogs.MyTimePickerDialogDialog
 import org.fossify.clock.extensions.config
 import org.fossify.clock.extensions.dbHelper
 import org.fossify.clock.extensions.timerDb
@@ -23,6 +24,7 @@ import org.fossify.clock.helpers.TAB_ALARM
 import org.fossify.clock.helpers.TAB_CLOCK
 import org.fossify.clock.helpers.TAB_STOPWATCH
 import org.fossify.clock.helpers.TAB_TIMER
+import org.fossify.clock.helpers.TalkingClockScheduler
 import org.fossify.clock.helpers.TimerHelper
 import org.fossify.clock.models.AlarmTimerBackup
 import org.fossify.commons.dialogs.RadioGroupDialog
@@ -84,6 +86,7 @@ class SettingsActivity : SimpleActivity() {
         setupUseEnglish()
         setupLanguage()
         setupHourFormat()
+        setupTalkingClock()
         setupDefaultTab()
         setupPreventPhoneFromSleeping()
         setupStartWeekOn()
@@ -100,6 +103,7 @@ class SettingsActivity : SimpleActivity() {
         arrayOf(
             binding.settingsColorCustomizationSectionLabel,
             binding.settingsGeneralSettingsLabel,
+            binding.settingsClockTabLabel,
             binding.settingsAlarmTabLabel,
             binding.settingsTimerTabLabel,
             binding.settingsMigratingLabel
@@ -160,6 +164,25 @@ class SettingsActivity : SimpleActivity() {
             settingsHourFormat.toggle()
             config.use24HourFormat = settingsHourFormat.isChecked
             updateWidgets()
+        }
+    }
+
+    private fun setupTalkingClock() {
+        binding.settingsTalkingClock.isChecked = config.talkingClockEnabled
+        binding.settingsTalkingClockIntervalHolder.beVisibleIf(config.talkingClockEnabled)
+        updateTalkingClockIntervalText()
+
+        binding.settingsTalkingClockHolder.setOnClickListener {
+            binding.settingsTalkingClock.toggle()
+            config.talkingClockEnabled = binding.settingsTalkingClock.isChecked
+            binding.settingsTalkingClockIntervalHolder.beVisibleIf(config.talkingClockEnabled)
+        }
+
+        binding.settingsTalkingClockIntervalHolder.setOnClickListener {
+            MyTimePickerDialogDialog(this, config.talkingClockIntervalSeconds) {
+                config.talkingClockIntervalSeconds = TalkingClockScheduler.getSafeIntervalSeconds(it)
+                updateTalkingClockIntervalText()
+            }
         }
     }
 
@@ -282,6 +305,11 @@ class SettingsActivity : SimpleActivity() {
     private fun updateTimerMaxReminderText() {
         binding.settingsTimerMaxReminder.text =
             formatSecondsToTimeString(config.timerMaxReminderSecs)
+    }
+
+    private fun updateTalkingClockIntervalText() {
+        binding.settingsTalkingClockInterval.text =
+            formatSecondsToTimeString(config.talkingClockIntervalSeconds)
     }
 
     private fun setupCustomizeWidgetColors() {

@@ -21,10 +21,16 @@ import org.fossify.commons.adapters.MyRecyclerViewAdapter
 import org.fossify.commons.dialogs.ConfirmationDialog
 import org.fossify.commons.extensions.applyColorFilter
 import org.fossify.commons.extensions.beVisibleIf
-import org.fossify.commons.extensions.getSelectedDaysString
 import org.fossify.commons.extensions.move
 import org.fossify.commons.helpers.EVERY_DAY_BIT
+import org.fossify.commons.helpers.FRIDAY_BIT
+import org.fossify.commons.helpers.MONDAY_BIT
+import org.fossify.commons.helpers.SATURDAY_BIT
 import org.fossify.commons.helpers.SORT_BY_CUSTOM
+import org.fossify.commons.helpers.SUNDAY_BIT
+import org.fossify.commons.helpers.THURSDAY_BIT
+import org.fossify.commons.helpers.TUESDAY_BIT
+import org.fossify.commons.helpers.WEDNESDAY_BIT
 import org.fossify.commons.interfaces.ItemMoveCallback
 import org.fossify.commons.interfaces.ItemTouchHelperContract
 import org.fossify.commons.interfaces.StartReorderDragListener
@@ -202,8 +208,7 @@ class AlarmsAdapter(
             return if (alarm.days == EVERY_DAY_BIT) {
                 activity.getString(org.fossify.commons.R.string.every_day)
             } else {
-                // TODO: This does not respect config.firstDayOfWeek
-                activity.getSelectedDaysString(alarm.days)
+                getSelectedDaysString(alarm.days)
             }
         }
 
@@ -212,6 +217,31 @@ class AlarmsAdapter(
             alarm.isToday() -> resources.getString(org.fossify.commons.R.string.today)
             else -> resources.getString(org.fossify.commons.R.string.tomorrow)
         }
+    }
+
+    private fun getSelectedDaysString(days: Int): String {
+        val dayNames = resources.getStringArray(org.fossify.commons.R.array.week_days_short)
+        val dayBits = listOf(
+            MONDAY_BIT,
+            TUESDAY_BIT,
+            WEDNESDAY_BIT,
+            THURSDAY_BIT,
+            FRIDAY_BIT,
+            SATURDAY_BIT,
+            SUNDAY_BIT,
+        ).let { dayPairs ->
+            val firstDayIndex = (activity.config.firstDayOfWeek - 1).coerceIn(0, dayPairs.lastIndex)
+            dayPairs.drop(firstDayIndex) + dayPairs.take(firstDayIndex)
+        }
+
+        val orderedDayNames = dayNames.toList().let { names ->
+            val firstDayIndex = (activity.config.firstDayOfWeek - 1).coerceIn(0, names.lastIndex)
+            names.drop(firstDayIndex) + names.take(firstDayIndex)
+        }
+
+        return dayBits.zip(orderedDayNames)
+            .filter { days and it.first != 0 }
+            .joinToString(", ") { it.second }
     }
 
     override fun onRowMoved(fromPosition: Int, toPosition: Int) {

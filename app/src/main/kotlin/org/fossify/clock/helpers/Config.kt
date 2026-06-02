@@ -96,6 +96,26 @@ class Config(context: Context) : BaseConfig(context) {
             putBoolean(INCREASE_VOLUME_GRADUALLY, increaseVolumeGradually)
         }
 
+    var talkingClockEnabled: Boolean
+        get() = prefs.getBoolean(TALKING_CLOCK_ENABLED, false)
+        set(talkingClockEnabled) = prefs.edit {
+            putBoolean(TALKING_CLOCK_ENABLED, talkingClockEnabled)
+        }
+
+    var talkingClockIntervalSeconds: Int
+        get() = TalkingClockScheduler.getSafeIntervalSeconds(
+            prefs.getInt(
+                TALKING_CLOCK_INTERVAL_SECONDS,
+                DEFAULT_TALKING_CLOCK_INTERVAL_SECONDS
+            )
+        )
+        set(talkingClockIntervalSeconds) = prefs.edit {
+            putInt(
+                TALKING_CLOCK_INTERVAL_SECONDS,
+                TalkingClockScheduler.getSafeIntervalSeconds(talkingClockIntervalSeconds)
+            )
+        }
+
     var alarmLastConfig: Alarm?
         get() = prefs.getString(ALARM_LAST_CONFIG, null)?.let { lastAlarm ->
             try {

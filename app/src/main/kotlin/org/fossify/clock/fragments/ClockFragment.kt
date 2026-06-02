@@ -19,6 +19,8 @@ import org.fossify.clock.extensions.getClosestEnabledAlarmString
 import org.fossify.clock.extensions.getFormattedDate
 import org.fossify.clock.helpers.FORMAT_12H_WITH_SECONDS
 import org.fossify.clock.helpers.FORMAT_24H_WITH_SECONDS
+import org.fossify.clock.helpers.TalkingClockScheduler
+import org.fossify.clock.helpers.TalkingClockSpeaker
 import org.fossify.clock.helpers.getPassedSeconds
 import org.fossify.clock.models.MyTimeZone
 import org.fossify.commons.extensions.beVisibleIf
@@ -33,6 +35,8 @@ class ClockFragment : Fragment() {
     private var passedSeconds = 0
     private var calendar = Calendar.getInstance()
     private val updateHandler = Handler(Looper.getMainLooper())
+    private var lastTalkingClockSecond: Int? = null
+    private var talkingClockSpeaker: TalkingClockSpeaker? = null
 
     private lateinit var binding: FragmentClockBinding
 
@@ -56,6 +60,9 @@ class ClockFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         updateHandler.removeCallbacksAndMessages(null)
+        talkingClockSpeaker?.shutdown()
+        talkingClockSpeaker = null
+        lastTalkingClockSecond = null
     }
 
     private fun setupDateTime() {
@@ -98,6 +105,37 @@ class ClockFragment : Fragment() {
             }
 
             (binding.timeZonesList.adapter as? TimeZonesAdapter)?.updateTimes()
+        }
+
+        context?.let { safeContext ->
+            @Suppress("DEPRECATION")
+            val isCurrentTab = isResumed && userVisibleHint
+            val isTalkingClockEnabled = safeContext.config.talkingClockEnabled && isCurrentTab
+            if (!isTalkingClockEnabled) {
+                talkingClockSpeaker?.shutdown()
+                talkingClockSpeaker = null
+                lastTalkingClockSecond = null
+            } else if (TalkingClockScheduler.shouldAnnounce(
+                    enabled = true,
+                    intervalSeconds = safeContext.config.talkingClockIntervalSeconds,
+                    passedSeconds = passedSeconds,
+                    lastAnnouncedSecond = lastTalkingClockSecond,
+                )
+            ) {
+                val speaker = talkingClockSpeaker ?: TalkingClockSpeaker(safeContext).also {
+                    talkingClockSpeaker = it
+                }
+                if (speaker.speakTime(
+                        hours = hours,
+                        minutes = minutes,
+                        seconds = seconds,
+                        use24HourFormat = safeContext.config.use24HourFormat,
+                        intervalSeconds = safeContext.config.talkingClockIntervalSeconds,
+                    )
+                ) {
+                    lastTalkingClockSecond = passedSeconds
+                }
+            }
         }
 
         updateHandler.postDelayed({

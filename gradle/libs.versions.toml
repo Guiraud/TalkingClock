@@ -17,6 +17,8 @@ autofittextview = "0.2.1"
 eventbus = "3.3.1"
 #KotlinX
 kotlinx-coroutines = "1.11.0"
+#JUnit
+junit = "4.13.2"
 #NumberPicker
 numberpicker = "2.4.13"
 #Room
@@ -47,6 +49,8 @@ eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
 #Kotlin
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+#JUnit
+junit = { module = "junit:junit", version.ref = "junit" }
 #NumberPicker
 numberpicker = { module = "io.github.ShawnLin013:number-picker", version.ref = "numberpicker" }
 #Room

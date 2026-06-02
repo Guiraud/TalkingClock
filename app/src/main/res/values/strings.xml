@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_launcher_name">Clock</string>
     <string name="time_zone">Time zone</string>
     <string name="vibrate">Vibrate</string>
@@ -53,6 +53,8 @@
     <string name="stopwatch_tab">Stopwatch tab</string>
     <string name="timer_tab">Timer tab</string>
     <string name="show_seconds">Show seconds</string>
+    <string name="talking_clock" tools:ignore="MissingTranslation">Announce time</string>
+    <string name="talking_clock_interval" tools:ignore="MissingTranslation">Announcement interval</string>
     <string name="increase_volume_gradually">Increase volume gradually</string>
     <string name="settings_import_data">Import alarms and timers</string>
     <string name="settings_export_data">Export alarms and timers</string>
