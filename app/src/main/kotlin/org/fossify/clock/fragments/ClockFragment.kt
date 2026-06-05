@@ -26,6 +26,7 @@ import org.fossify.clock.models.MyTimeZone
 import org.fossify.commons.extensions.beVisibleIf
 import org.fossify.commons.extensions.getProperBackgroundColor
 import org.fossify.commons.extensions.getProperTextColor
+import org.fossify.commons.extensions.toast
 import org.fossify.commons.extensions.updateTextColors
 import java.util.Calendar
 
@@ -91,6 +92,14 @@ class ClockFragment : Fragment() {
                 fabClicked()
             }
 
+            shortcutInterval1m.setOnClickListener { enableTalkingClock(60) }
+            shortcutInterval2m.setOnClickListener { enableTalkingClock(120) }
+            shortcutInterval5m.setOnClickListener { enableTalkingClock(300) }
+            shortcutIntervalOther.setOnClickListener { showCustomIntervalPicker() }
+            shortcutDuration10m.setOnClickListener { enableTalkingClockDuration(10 * 60) }
+            shortcutDuration20m.setOnClickListener { enableTalkingClockDuration(20 * 60) }
+            shortcutDuration30m.setOnClickListener { enableTalkingClockDuration(30 * 60) }
+
             updateTimeZones()
         }
     }
@@ -110,6 +119,12 @@ class ClockFragment : Fragment() {
         context?.let { safeContext ->
             @Suppress("DEPRECATION")
             val isCurrentTab = isResumed && userVisibleHint
+
+            if (safeContext.config.talkingClockEndTime != -1L && System.currentTimeMillis() > safeContext.config.talkingClockEndTime) {
+                safeContext.config.talkingClockEnabled = false
+                safeContext.config.talkingClockEndTime = -1L
+            }
+
             val isTalkingClockEnabled = safeContext.config.talkingClockEnabled && isCurrentTab
             if (!isTalkingClockEnabled) {
                 talkingClockSpeaker?.shutdown()
@@ -197,4 +212,33 @@ class ClockFragment : Fragment() {
             updateTimeZones()
         }
     }
+
+    private fun enableTalkingClock(intervalSeconds: Int) {
+        val safeContext = context ?: return
+        safeContext.config.talkingClockEnabled = true
+        safeContext.config.talkingClockIntervalSeconds = intervalSeconds
+        safeContext.config.talkingClockEndTime = -1L
+        safeContext.toast(org.fossify.clock.R.string.talking_clock)
+    }
+
+    private fun showCustomIntervalPicker() {
+        val safeContext = activity as? SimpleActivity ?: return
+        org.fossify.clock.dialogs.MyTimePickerDialogDialog(safeContext, safeContext.config.talkingClockIntervalSeconds) {
+            safeContext.config.talkingClockEnabled = true
+            safeContext.config.talkingClockIntervalSeconds = TalkingClockScheduler.getSafeIntervalSeconds(it)
+            safeContext.config.talkingClockEndTime = -1L
+            safeContext.toast(org.fossify.clock.R.string.talking_clock)
+        }
+    }
+
+    private fun enableTalkingClockDuration(durationSeconds: Int) {
+        val safeContext = context ?: return
+        safeContext.config.talkingClockEnabled = true
+        if (safeContext.config.talkingClockIntervalSeconds <= 0) {
+            safeContext.config.talkingClockIntervalSeconds = 60
+        }
+        safeContext.config.talkingClockEndTime = System.currentTimeMillis() + (durationSeconds * 1000L)
+        safeContext.toast(org.fossify.clock.R.string.talking_clock)
+    }
+
 }

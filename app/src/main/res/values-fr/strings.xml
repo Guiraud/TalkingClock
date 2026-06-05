@@ -46,6 +46,13 @@
     <string name="show_seconds">Afficher les secondes</string>
     <string name="talking_clock">Annoncer l\'heure</string>
     <string name="talking_clock_interval">Intervalle d\'annonce</string>
+    <string name="shortcut_1mn">1mn</string>
+    <string name="shortcut_2mn">2mn</string>
+    <string name="shortcut_5mn">5mn</string>
+    <string name="shortcut_other">autre...</string>
+    <string name="shortcut_duration_10mn">pendant 10mn</string>
+    <string name="shortcut_duration_20mn">pendant 20 min</string>
+    <string name="shortcut_duration_30mn">pendant 30mn</string>
     <string name="increase_volume_gradually">Augmenter progressivement le volume</string>
     <string name="faq_1_title">Comment puis-je modifier le tri des tours dans l\'onglet chronomètre \?</string>
     <string name="faq_1_text">Cliquez simplement sur l’une des colonnes afin de trier les tours selon la colonne donnée. Par des clics supplémentaires, vous basculerez entre les tris croissant et décroissant.</string>

@@ -52,11 +52,75 @@
             android:textSize="@dimen/big_text_size"
             tools:text="Thu, 8:00" />
 
+        <LinearLayout
+            android:id="@+id/clock_talking_clock_shortcuts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/clock_alarm"
+            android:layout_marginTop="@dimen/normal_margin"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/shortcut_interval_1m"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/shortcut_1mn" />
+
+                <Button
+                    android:id="@+id/shortcut_interval_2m"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/shortcut_2mn" />
+
+                <Button
+                    android:id="@+id/shortcut_interval_5m"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/shortcut_5mn" />
+
+                <Button
+                    android:id="@+id/shortcut_interval_other"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/shortcut_other" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/shortcut_duration_10m"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/shortcut_duration_10mn" />
+
+                <Button
+                    android:id="@+id/shortcut_duration_20m"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/shortcut_duration_20mn" />
+
+                <Button
+                    android:id="@+id/shortcut_duration_30m"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/shortcut_duration_30mn" />
+            </LinearLayout>
+        </LinearLayout>
+
         <org.fossify.commons.views.MyRecyclerView
             android:id="@+id/time_zones_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/clock_alarm"
+            android:layout_below="@+id/clock_talking_clock_shortcuts"
             android:layout_marginTop="@dimen/normal_margin"
             android:clipToPadding="false"
             android:overScrollMode="ifContentScrolls"
