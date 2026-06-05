@@ -116,6 +116,12 @@ class Config(context: Context) : BaseConfig(context) {
             )
         }
 
+    var talkingClockEndTime: Long
+        get() = prefs.getLong(TALKING_CLOCK_END_TIME, -1L)
+        set(talkingClockEndTime) = prefs.edit {
+            putLong(TALKING_CLOCK_END_TIME, talkingClockEndTime)
+        }
+
     var alarmLastConfig: Alarm?
         get() = prefs.getString(ALARM_LAST_CONFIG, null)?.let { lastAlarm ->
             try {

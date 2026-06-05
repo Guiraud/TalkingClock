@@ -55,6 +55,13 @@
     <string name="show_seconds">Show seconds</string>
     <string name="talking_clock" tools:ignore="MissingTranslation">Announce time</string>
     <string name="talking_clock_interval" tools:ignore="MissingTranslation">Announcement interval</string>
+    <string name="shortcut_1mn">1m</string>
+    <string name="shortcut_2mn">2m</string>
+    <string name="shortcut_5mn">5m</string>
+    <string name="shortcut_other">other...</string>
+    <string name="shortcut_duration_10mn">for 10m</string>
+    <string name="shortcut_duration_20mn">for 20m</string>
+    <string name="shortcut_duration_30mn">for 30m</string>
     <string name="increase_volume_gradually">Increase volume gradually</string>
     <string name="settings_import_data">Import alarms and timers</string>
     <string name="settings_export_data">Export alarms and timers</string>
